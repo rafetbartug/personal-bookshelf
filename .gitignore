@@ -1,0 +1,22 @@
+# IntelliJ / IDEA
+.idea/
+*.iml
+out/
+
+# Maven
+**/target/
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+application.properties
+application-local.properties
+
+# Node
+**/node_modules/
+**/dist/
