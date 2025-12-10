@@ -2,6 +2,7 @@ package com.rbb.bookshelf.shelf;
 
 import com.rbb.bookshelf.common.CurrentUserService;
 import com.rbb.bookshelf.shelf.dto.CreateShelfRequest;
+import com.rbb.bookshelf.shelf.dto.ShelfResponse;
 import com.rbb.bookshelf.shelf.dto.UpdateShelfRequest;
 import com.rbb.bookshelf.user.User;
 import jakarta.validation.Valid;
@@ -20,25 +21,25 @@ public class ShelfController {
     private final CurrentUserService currentUserService;
 
     @PostMapping
-    public Shelf create(@Valid @RequestBody CreateShelfRequest req, Authentication auth) {
+    public ShelfResponse create(@Valid @RequestBody CreateShelfRequest req, Authentication auth) {
         User user = currentUserService.requireUser(auth);
         return shelfService.create(user, req.getName(), req.isPublic());
     }
 
     @GetMapping
-    public List<Shelf> listMine(Authentication auth) {
+    public List<ShelfResponse> listMine(Authentication auth) {
         Long userId = currentUserService.requireUserId(auth);
         return shelfService.listMine(userId);
     }
 
     @GetMapping("/{id}")
-    public Shelf getMine(@PathVariable Long id, Authentication auth) {
+    public ShelfResponse getMine(@PathVariable Long id, Authentication auth) {
         Long userId = currentUserService.requireUserId(auth);
         return shelfService.getMine(userId, id);
     }
 
     @PutMapping("/{id}")
-    public Shelf updateMine(@PathVariable Long id, @Valid @RequestBody UpdateShelfRequest req, Authentication auth) {
+    public ShelfResponse updateMine(@PathVariable Long id, @Valid @RequestBody UpdateShelfRequest req, Authentication auth) {
         Long userId = currentUserService.requireUserId(auth);
         return shelfService.updateMine(userId, id, req.getName(), req.isPublic());
     }

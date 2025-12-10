@@ -3,6 +3,7 @@ package com.rbb.bookshelf.shelf;
 import com.rbb.bookshelf.book.Book;
 import com.rbb.bookshelf.book.BookRepository;
 import com.rbb.bookshelf.common.NotFoundException;
+import com.rbb.bookshelf.shelf.dto.ShelfItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,23 @@ public class ShelfItemService {
     private final ShelfItemRepository shelfItemRepository;
     private final BookRepository bookRepository;
 
-    public ShelfItem addItem(Long userId, Long shelfId, Long bookId, ReadingStatus status, Integer progressPercent) {
-        Shelf shelf = shelfService.getMine(userId, shelfId);
+    private ShelfItemResponse toResponse(ShelfItem item) {
+        return ShelfItemResponse.builder()
+                .id(item.getId())
+                .addedAt(item.getAddedAt())
+                .status(item.getStatus())
+                .progressPercent(item.getProgressPercent())
+                .bookId(item.getBook().getId())
+                .bookTitle(item.getBook().getTitle())
+                .authorId(item.getBook().getAuthor().getId())
+                .authorName(item.getBook().getAuthor().getName())
+                .build();
+    }
+
+    public ShelfItemResponse addItem(Long userId, Long shelfId, Long bookId, ReadingStatus status, Integer progressPercent) {
+        Shelf shelf = shelfService.getMineEntity(userId, shelfId); // asagida acikliyorum
 
         if (shelfItemRepository.existsByShelfIdAndBookId(shelfId, bookId)) {
-            // basit: ayni kitap ayni rafta varsa tekrar ekleme
             throw new IllegalArgumentException("Book already exists in this shelf");
         }
 
@@ -34,16 +47,16 @@ public class ShelfItemService {
                 .progressPercent(progressPercent)
                 .build();
 
-        return shelfItemRepository.save(item);
+        return toResponse(shelfItemRepository.save(item));
     }
 
-    public List<ShelfItem> listItems(Long userId, Long shelfId) {
-        shelfService.getMine(userId, shelfId); // owner check
-        return shelfItemRepository.findAllByShelfId(shelfId);
+    public List<ShelfItemResponse> listItems(Long userId, Long shelfId) {
+        shelfService.getMineEntity(userId, shelfId); // owner check
+        return shelfItemRepository.findAllByShelfId(shelfId).stream().map(this::toResponse).toList();
     }
 
-    public ShelfItem updateItem(Long userId, Long shelfId, Long itemId, ReadingStatus status, Integer progressPercent) {
-        shelfService.getMine(userId, shelfId); // owner check
+    public ShelfItemResponse updateItem(Long userId, Long shelfId, Long itemId, ReadingStatus status, Integer progressPercent) {
+        shelfService.getMineEntity(userId, shelfId); // owner check
 
         ShelfItem item = shelfItemRepository.findByIdAndShelfId(itemId, shelfId)
                 .orElseThrow(() -> new NotFoundException("Shelf item not found"));
@@ -51,11 +64,11 @@ public class ShelfItemService {
         if (status != null) item.setStatus(status);
         if (progressPercent != null) item.setProgressPercent(progressPercent);
 
-        return shelfItemRepository.save(item);
+        return toResponse(shelfItemRepository.save(item));
     }
 
     public void removeItem(Long userId, Long shelfId, Long itemId) {
-        shelfService.getMine(userId, shelfId); // owner check
+        shelfService.getMineEntity(userId, shelfId); // owner check
         ShelfItem item = shelfItemRepository.findByIdAndShelfId(itemId, shelfId)
                 .orElseThrow(() -> new NotFoundException("Shelf item not found"));
         shelfItemRepository.delete(item);

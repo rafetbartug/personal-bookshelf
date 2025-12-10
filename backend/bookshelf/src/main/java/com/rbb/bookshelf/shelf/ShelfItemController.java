@@ -2,6 +2,7 @@ package com.rbb.bookshelf.shelf;
 
 import com.rbb.bookshelf.common.CurrentUserService;
 import com.rbb.bookshelf.shelf.dto.AddShelfItemRequest;
+import com.rbb.bookshelf.shelf.dto.ShelfItemResponse;
 import com.rbb.bookshelf.shelf.dto.UpdateShelfItemRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +20,22 @@ public class ShelfItemController {
     private final CurrentUserService currentUserService;
 
     @PostMapping
-    public ShelfItem add(@PathVariable Long shelfId, @Valid @RequestBody AddShelfItemRequest req, Authentication auth) {
+    public ShelfItemResponse add(@PathVariable Long shelfId, @Valid @RequestBody AddShelfItemRequest req, Authentication auth) {
         Long userId = currentUserService.requireUserId(auth);
         return shelfItemService.addItem(userId, shelfId, req.getBookId(), req.getStatus(), req.getProgressPercent());
     }
 
     @GetMapping
-    public List<ShelfItem> list(@PathVariable Long shelfId, Authentication auth) {
+    public List<ShelfItemResponse> list(@PathVariable Long shelfId, Authentication auth) {
         Long userId = currentUserService.requireUserId(auth);
         return shelfItemService.listItems(userId, shelfId);
     }
 
     @PatchMapping("/{itemId}")
-    public ShelfItem update(
+    public ShelfItemResponse update(
             @PathVariable Long shelfId,
             @PathVariable Long itemId,
-            @RequestBody UpdateShelfItemRequest req,
+            @Valid @RequestBody UpdateShelfItemRequest req,
             Authentication auth
     ) {
         Long userId = currentUserService.requireUserId(auth);

@@ -9,4 +9,5 @@ public interface ShelfItemRepository extends JpaRepository<ShelfItem, Long> {
     List<ShelfItem> findAllByShelfId(Long shelfId);
     Optional<ShelfItem> findByIdAndShelfId(Long id, Long shelfId);
     boolean existsByShelfIdAndBookId(Long shelfId, Long bookId);
+    long deleteAllByShelfId(Long shelfId);
 }

@@ -16,6 +16,11 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -36,12 +41,28 @@ public class SecurityConfig {
         return http
                 .securityMatcher("/api/**")
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
                 .sessionManagement(sm -> sm.sessionCreationPolicy(
                         org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // auth serbest
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/external/**").permitAll()
+
+                        // admin test
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // PUBLIC READ-ONLY (GET)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/books/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/authors/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/books/*/ratings").permitAll()
+                        // eger summary ekleyeceksen:
+                        // .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/books/*/ratings/summary").permitAll()
+
+                        // geri kalan her sey token ister
                         .anyRequest().authenticated()
                 )
+
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(restAuthEntryPoint)
                         .accessDeniedHandler(restAccessDeniedHandler)
@@ -58,6 +79,20 @@ public class SecurityConfig {
             throws Exception {
         return c.getAuthenticationManager();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("http://localhost:5173"));
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cfg);
+        return source;
+    }
+
 
 
     @Bean
