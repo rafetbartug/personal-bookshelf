@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class UpdateRatingRequest {
-    @Min(0) @Max(10)
+    @Min(0) @Max(5)
     private Integer score;
-
     private String comment;
 }

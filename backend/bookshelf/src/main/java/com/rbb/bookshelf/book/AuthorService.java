@@ -5,6 +5,7 @@ import com.rbb.bookshelf.book.dto.AuthorResponse;
 import com.rbb.bookshelf.common.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.rbb.bookshelf.author.AuthorRepository;
 
 import java.util.List;
 
@@ -38,5 +39,23 @@ public class AuthorService {
         Author a = authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Author not found"));
         return toResponse(a);
+    }
+    public AuthorResponse update(Long id, AuthorRequest req) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Author not found"));
+
+        author.setName(req.getName());
+        author.setBio(req.getBio());
+
+        return toResponse(authorRepository.save(author));
+    }
+
+    public void delete(Long id) {
+        if (!authorRepository.existsById(id)) {
+            throw new NotFoundException("Author not found");
+        }
+        // Not: Eğer yazarın kitapları varsa veritabanı (FK hatası) silmene izin vermeyebilir.
+        // İstersen önce kitaplarını silebilirsin ama şimdilik basit tutalım.
+        authorRepository.deleteById(id);
     }
 }

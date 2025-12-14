@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class RatingSummaryResponse {
     private Long bookId;
-    private long count;
+    private Long count;
     private Double avg;
 }

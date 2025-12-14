@@ -1,7 +1,6 @@
 package com.rbb.bookshelf.book.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -13,7 +12,6 @@ public class BookRequest {
     private Integer publishedYear;
     private String coverUrl;
     private String description;
-
-    @NotNull
     private Long authorId;
+    private String authorName;
 }

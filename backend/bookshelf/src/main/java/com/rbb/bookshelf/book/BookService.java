@@ -1,5 +1,6 @@
 package com.rbb.bookshelf.book;
 
+import com.rbb.bookshelf.author.AuthorRepository;
 import com.rbb.bookshelf.book.dto.BookRequest;
 import com.rbb.bookshelf.book.dto.BookResponse;
 import com.rbb.bookshelf.common.NotFoundException;
@@ -52,5 +53,31 @@ public class BookService {
         Book b = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Book not found"));
         return toResponse(b);
+    }
+    public BookResponse update(Long id, BookRequest req) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Book not found"));
+
+        // Yazar değişmiş olabilir, kontrol et
+        if (!book.getAuthor().getId().equals(req.getAuthorId())) {
+            Author newAuthor = authorRepository.findById(req.getAuthorId())
+                    .orElseThrow(() -> new NotFoundException("Author not found"));
+            book.setAuthor(newAuthor);
+        }
+
+        book.setTitle(req.getTitle());
+        book.setIsbn(req.getIsbn());
+        book.setPublishedYear(req.getPublishedYear());
+        book.setCoverUrl(req.getCoverUrl());
+        book.setDescription(req.getDescription());
+
+        return toResponse(bookRepository.save(book));
+    }
+
+    public void delete(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new NotFoundException("Book not found");
+        }
+        bookRepository.deleteById(id);
     }
 }

@@ -3,42 +3,38 @@ package com.rbb.bookshelf.rating;
 import com.rbb.bookshelf.book.Book;
 import com.rbb.bookshelf.user.User;
 import jakarta.persistence.*;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ratings",
-        uniqueConstraints = @UniqueConstraint(name = "uq_ratings_user_book", columnNames = {"user_id", "book_id"})
-)
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Table(name = "ratings", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "book_id"}) // Bir kullanıcı bir kitaba 1 kere puan verebilir
+})
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rating {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int score; // 0..10 validation DTO'da
+    private Integer score; // 0-5 arası
 
-    @Lob
+    @Column(length = 1000)
     private String comment;
 
-    @Column(name = "rated_at")
-    private LocalDateTime ratedAt;
+    @Builder.Default
+    private LocalDateTime ratedAt = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @PrePersist
-    void prePersist() {
-        if (ratedAt == null) ratedAt = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 }

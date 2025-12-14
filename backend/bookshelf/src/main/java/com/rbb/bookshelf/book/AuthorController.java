@@ -31,4 +31,16 @@ public class AuthorController {
     public AuthorResponse get(@PathVariable Long id) {
         return authorService.get(id);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public AuthorResponse update(@PathVariable Long id, @Valid @RequestBody AuthorRequest req) {
+        return authorService.update(id, req);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        authorService.delete(id);
+    }
 }

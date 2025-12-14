@@ -46,7 +46,9 @@ public class SecurityConfig {
                         org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // auth serbest
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**",
+                                "/error",
+                                "/server-info").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/external/**").permitAll()
 
                         // admin test
