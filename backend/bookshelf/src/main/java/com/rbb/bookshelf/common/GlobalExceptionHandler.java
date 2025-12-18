@@ -1,35 +1,37 @@
 package com.rbb.bookshelf.common;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    record ApiError(Instant timestamp, int status, String error, String message, String path, Map<String,String> messages) {}
-
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleNotFound(NotFoundException ex, jakarta.servlet.http.HttpServletRequest req) {
-        return new ApiError(Instant.now(), 404, "NOT_FOUND", ex.getMessage(), req.getRequestURI(), null);
+    public ResponseEntity<?> handleNotFound(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of(
+                        "timestamp", Instant.now(),
+                        "status", 404,
+                        "error", "NOT_FOUND",
+                        "message", ex.getMessage()
+                )
+        );
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleBadRequest(IllegalArgumentException ex, jakarta.servlet.http.HttpServletRequest req) {
-        return new ApiError(Instant.now(), 400, "BAD_REQUEST", ex.getMessage(), req.getRequestURI(), null);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidation(MethodArgumentNotValidException ex, jakarta.servlet.http.HttpServletRequest req) {
-        Map<String,String> fieldErrors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(fe -> fieldErrors.put(fe.getField(), fe.getDefaultMessage()));
-        return new ApiError(Instant.now(), 400, "BAD_REQUEST", "Validation failed", req.getRequestURI(), fieldErrors);
+    public ResponseEntity<?> handleBadRequest(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(
+                Map.of(
+                        "timestamp", Instant.now(),
+                        "status", 400,
+                        "error", "BAD_REQUEST",
+                        "message", ex.getMessage()
+                )
+        );
     }
 }
