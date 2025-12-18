@@ -14,8 +14,6 @@ Thumbs.db
 # Env / secrets
 .env
 .env.*
-application.properties
-application-local.properties
 
 # Node
 **/node_modules/
