@@ -48,7 +48,7 @@ export default function BookDetail() {
                     setScore(resMy.data.score);
                     setComment(resMy.data.comment);
                 } catch (e) {
-                    // Henüz puan vermemiş, sorun yok.
+
                 }
             }
         } catch (err) {

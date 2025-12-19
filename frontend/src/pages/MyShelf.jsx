@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 
 export default function MyShelf() {
-    const [shelves, setShelves] = useState([]); // Raflar listesi
-    const [selectedShelf, setSelectedShelf] = useState(null); // Seçili rafın ID'si
-    const [shelfItems, setShelfItems] = useState([]); // Seçili rafın kitapları
-    const [newShelfName, setNewShelfName] = useState(""); // Yeni raf ismi inputu
+    const [shelves, setShelves] = useState([]);
+    const [selectedShelf, setSelectedShelf] = useState(null);
+    const [shelfItems, setShelfItems] = useState([]);
+    const [newShelfName, setNewShelfName] = useState("");
 
-    // Sayfa açılınca kullanıcının raflarını çek
     useEffect(() => {
         fetchShelves();
     }, []);
 
-    // Seçili raf değişince içindeki kitapları çek
     useEffect(() => {
         if (selectedShelf) {
             fetchShelfItems(selectedShelf);

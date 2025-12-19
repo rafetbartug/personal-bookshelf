@@ -21,7 +21,6 @@ export default function ExternalSearch() {
         }
     };
 
-    // MODAL YOK! Direkt Kaydet var.
     const handleSaveToDb = async (book) => {
         try {
             await api.post("/api/books", {
@@ -31,9 +30,8 @@ export default function ExternalSearch() {
                 coverUrl: book.coverUrl,
                 description: book.description,
 
-                // ÖNEMLİ: ID göndermiyoruz, direkt ismi gönderiyoruz
                 authorName: book.authorName,
-                authorId: null // ID boş gidiyor
+                authorId: null
             });
 
             alert(`"${book.title}" ve yazarı başarıyla kaydedildi! ✅`);

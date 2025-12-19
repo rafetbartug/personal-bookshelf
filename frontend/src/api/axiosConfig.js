@@ -5,7 +5,6 @@ const api = axios.create({
     baseURL: baseURL,
 });
 
-// Interceptor kismi gayet düzgün (Token ekleme)
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {

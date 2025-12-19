@@ -45,15 +45,14 @@ export default function Books() {
                 navigate("/myshelf");
                 return;
             }
-            setMyShelves(res.data); // Rafları kaydet
-            setSelectedBookId(bookId); // Hangi kitabın seçildiğini kaydet
-            setShowModal(true); // Modalı aç
+            setMyShelves(res.data);
+            setSelectedBookId(bookId);
+            setShowModal(true);
         } catch (err) {
             alert("Raflar yüklenirken hata oluştu.");
         }
     };
 
-    // 2. ADIM: Modaldan bir raf seçilince kitabı oraya ekle
     const addToSpecificShelf = async (shelfId) => {
         try {
             await api.post(`/api/shelves/${shelfId}/items`, {
@@ -101,7 +100,7 @@ export default function Books() {
                                 <p className="card-text text-muted small">{book.authorName}</p>
                                 <p className="card-text text-truncate">{book.description}</p>
                                 <div className="mt-auto">
-                                    {/* GÜNCELLENEN KISIM: DETAY BUTONU ARTIK ÇALIŞIYOR */}
+                                    {/* GÜNCELLE */}
                                     <button
                                         onClick={() => navigate(`/books/${book.id}`)}
                                         className="btn btn-outline-primary btn-sm w-100 mb-2"

@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                // Backend'den role bilgisi 'role' claim'i içinde geliyor
                 setUser({ username: decoded.sub, role: decoded.role });
             } catch (error) {
                 console.error("Geçersiz token", error);

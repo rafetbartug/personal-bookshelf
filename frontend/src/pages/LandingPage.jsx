@@ -38,7 +38,7 @@ export default function LandingPage() {
                 </div>
             </div>
 
-            {/* ÖZELLİKLER KARTLARI (DÜZELTİLDİ: Yazılar artık koyu renk) */}
+            {/* ÖZELLİKLER KARTLARI */}
             <div className="row mt-5 pt-5 g-4">
                 <div className="col-md-4">
                     {/* DİKKAT: text-white ve bg-transparent SİLİNDİ */}

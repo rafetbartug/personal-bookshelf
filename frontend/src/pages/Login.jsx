@@ -16,16 +16,13 @@ export default function Login() {
         setError("");
 
         try {
-            // Backend'e Login İsteği
             const response = await api.post("/api/auth/login", {
                 usernameOrEmail: username,
                 password: password
             });
 
-            // Gelen Token'ı sisteme kaydet
             login(response.data.token);
 
-            // Anasayfaya yönlendir
             navigate("/");
 
         } catch (err) {
