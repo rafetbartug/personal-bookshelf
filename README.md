@@ -1,43 +1,25 @@
-# Personal Bookshelf Management System
+## Project Goal
 
-A full-stack personal library management application for organizing books, authors, shelves, reading progress, ratings, and collection metadata.
+The goal of this project is to provide a modern personal library management platform where users can organize their book collections, manage shelves, track reading progress, and interact with their library data through a clean full-stack application.
 
-## Overview
+It is designed to combine structured book management with a practical and user-friendly experience, bringing together backend architecture, database design, and frontend usability in a single system.
 
-Personal Bookshelf Management System is designed to help users manage their personal book collections in a structured and user-friendly way. The project focuses on tracking books, organizing shelves, managing authors, and monitoring reading progress through a modern full-stack architecture.
+## Backend
 
-The system combines a Java Spring Boot backend with a Vue 3 frontend and uses MySQL as the relational database. It aims to provide a clean and extensible foundation for personal library management.
+The backend is located under `backend/bookshelf` and follows a standard Maven-based Spring Boot project structure. It handles the core business logic, data modeling, and database interactions of the application.
 
-## Features
+## Frontend
 
-- User-based bookshelf management
-- Add, update, and remove books
-- Manage authors and book metadata
-- Organize books into shelves
-- Track reading status
-- Store ratings and personal library data
-- Structured backend with REST-oriented architecture
-- Relational data model for books, users, authors, and shelves
+The frontend is located in a separate `frontend` directory, providing the user-facing interface of the system and keeping the client-side and server-side structure clearly separated.
 
-## Tech Stack
+## Development Focus
 
-### Backend
-- Java 21
-- Spring Boot
-- Maven
-- Spring Data JPA
-- Spring Security
-- MySQL
-- Lombok
+This project reflects a full-stack development approach and focuses on building a structured, scalable, and maintainable application with a clear separation between backend and frontend responsibilities.
 
-### Frontend
-- Vue 3
-- Node.js
+## Deployment
 
-## Project Structure
+A live deployment link is included in the repository’s About section.
 
-```text
-personal-bookshelf/
-├── backend/
-│   └── bookshelf/
-└── README.md
+## Author
+
+Rafet Bartuğ Bartınlı
